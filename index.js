@@ -5,59 +5,87 @@ class Search extends React.Component
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
-    this.options = props.options;
-    this.state = { hasInput: false, selected: null };
+    this.state = {
+      isLoaded: false,
+      userList: null,
+      selectedUser: null,
+      search: null
+    };
   }
 
   handleInputChange(event) {
-    if (event.target.value) {
-      this.setState({ hasInput: true });
+    let value = event.target.value;
+
+    if (value) {
+      this.setState({ search : value });
+      this.queryUserList();
     } else {
-      this.setState({ hasInput: false });
+      this.setState({ isLoaded: false });
     }
   }
-  
+
   handleItemClick(event) {
-    let selected = {
-      key : event.target.dataset.key,
-      value : event.target.dataset.value,
-      top : event.target.getBoundingClientRect().top,
-    };
-    this.setState({ selected: selected });
+    this.setState({
+      selectedUser : {
+        key : event.target.dataset.key,
+        value : event.target.dataset.value,
+        top : event.target.getBoundingClientRect().top,
+      }
+    });
   }
-  
+
   handleButtonClick(event) {
-    const action = event.target.dataset.action;
-    
-    this.setState({ selected: null });
-    
-    if (action == 'proceed') {
+    this.setState({ selectedUser: null });
+
+    if (event.target.dataset.action == 'proceed') {
       alert("Done!")
     }
   }
 
+  queryUserList() {
+    const search = this.state.search;
+
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          let filteredData = result.filter(
+            user => user.name.toLowerCase().includes(search.toLowerCase())
+          );
+
+          this.setState({
+            isLoaded: true,
+            userList: filteredData
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error: true
+          });
+        }
+      );
+  }
+
   render() {
-    const hasInput = this.state.hasInput;
-    const options = this.options;
-    const selected = this.state.selected;
     let dropdown;
     let popout;
-    
-    if (hasInput) {
+
+    if (this.state.isLoaded) {
       dropdown = (
         <ul className="search-list">
-          {options.map((option) =>
-            <li key={option.key} data-key={option.key} data-value={option.value} onClick={this.handleItemClick}>
-              {option.value}
+          {this.state.userList.map((option) =>
+            <li key={option.id} data-key={option.id} data-value={option.name} onClick={this.handleItemClick}>
+              {option.name}
             </li>
           )}
         </ul>
       );
     }
-    
-    if (selected) {
-      popout = <div className="popout" style={{top: selected.top}}>
-        <div className="popout-name">{selected.value}</div>
+
+    if (this.state.selectedUser) {
+      popout = <div className="popout" style={{top: this.state.selectedUser.top}}>
+        <div className="popout-name">{ this.state.selectedUser.value }</div>
         <div className="popout-greetings">Hello!</div>
         <div className="popout-buttons">
           <div className="btn-cancel" onClick={this.handleButtonClick} data-action="cancel">Cancel</div>
@@ -65,7 +93,7 @@ class Search extends React.Component
         </div>
       </div>;
     }
-    
+
     return (
       <div>
         <div className="search">
@@ -84,14 +112,8 @@ class Search extends React.Component
 
 // ========================================
 
-const options = [
-  {key: 1, value: 'Isaac Newton'},
-  {key: 2, value: 'Benjamin Franklin'},
-  {key: 3, value: 'Marie Curie'},
-  {key: 4, value: 'Albert Einstein'},
-];
-
 ReactDOM.render(
-  <Search options={options}/>,
-  document.getElementById('search-pane')
+  <Search />,
+  document.getElementById('search')
 );
+
