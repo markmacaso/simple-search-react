@@ -1,0 +1,103 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+button.btn-search {
+  border-radius: 20px;
+  width: 180px;
+  height: 45px;
+  font-size: 17px;
+  color: #efefef;
+  background: #c64135;
+  border: 2px #dda7e8 solid;
+  cursor: pointer;
+  float: left;
+}
+
+button.btn-search i {
+  margin-right: 10px;
+}
+
+div.search {
+  float: left;
+  margin-right: 10px;
+}
+input.search-input {
+  width: 200px;
+  height: 30px;
+  padding: 5px;
+  font-size: 15px;
+  background: #9f9fa0;
+  border: 1px #9f9fa0 solid;
+  border-radius: 2px 2px 0 0;
+}
+
+ul.search-list {
+  padding: 0px;
+  list-style: none;
+  border: 1px #9f9fa0 solid;
+  width: 210px;
+  margin-top: 0px;
+  border-radius: 0 0 2px 2px;
+}
+
+ul.search-list > li { 
+  padding: 10px 5px;
+  text-align: center;
+  border-bottom: 1px #9f9fa0 solid;
+  cursor: pointer;
+}
+
+ul.search-list > li.selected { 
+}
+
+ul.search-list > li:last-child { 
+  border-bottom: 0px;
+}
+
+ul.search-list > li:hover { 
+  background: #efefef;
+}
+
+div.popout {
+  width: 300px;
+  padding: 15px;
+  border-radius: 5px;
+  background: #cfcfcf;
+  position: absolute;
+  top: 100px;
+  left: 235px;
+}
+
+div.popout div.popout-name {
+  font-size: 20px;
+}
+
+div.popout div.popout-greetings {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+div.popout div.popout-buttons {
+  font-size: 16px;
+}
+
+div.popout div.popout-buttons div.btn-cancel {
+  width: 75px;
+  float: left;
+  cursor: pointer;
+}
+
+div.popout div.popout-buttons div.btn-proceed {
+  width: 75px;
+  float: right;
+  cursor: pointer;
+}
+
+div.popout div.popout-buttons div:hover {
+  font-weight: bold;
+}
